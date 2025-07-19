@@ -1,69 +1,435 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador Lotomania Completo</title>
+  <style>
+    body {
+      background-image: url('./img/background.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      color: #000;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .bola {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 42px;
+      margin: 5px;
+      border-radius: 50%;
+      background-color: orange;
+      color: black;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+      cursor: pointer;
+      user-select: none;
+    }
+    #ultimoResultado {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      min-height: 50px;
+    }
+    #jogosGerados, #jogosSalvos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      justify-items: center;
+      margin-top: 20px;
+    }
+    .jogo-container {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 10px 15px 20px 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.15);
+      display: grid;
+      grid-template-columns: repeat(10, auto);
+      grid-auto-rows: 42px;
+      gap: 8px 10px;
+      width: max-content;
+      justify-content: center;
+      position: relative;
+    }
+    .jogo-container .bola {
+      margin: 0 auto;
+      width: 42px;
+      height: 42px;
+      font-size: 15px;
+    }
+    .jogo-container button {
+      grid-column: 1 / -1;
+      margin-top: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+      background-color: orange;
+      color: black;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .jogo-container button:hover {
+      background-color: #e67e22;
+    }
+    .painel-numeros {
+      margin-top: 20px;
+      padding: 10px;
+      background: #fffefe;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 10px 5px 0 0;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    input[type="number"] {
+      width: 80px;
+      padding: 5px;
+      margin-left: 10px;
+      font-size: 16px;
+    }
+    .selecionado {
+      border: 2px solid rgb(10, 212, 20);
+      background-color: rgb(241, 235, 235);
+    }
+    #jogosSalvos {
+      display: none; /* Esconde inicialmente */
+      margin-top: 20px;
+    }
+
+    /* Ajuste para a caixa dos números manuais */
+    #manualNumbersContainer {
+      margin: 15px auto;
+      padding: 10px;
+      background: #fffefe;
+      border: 2px solid black; /* contorno preto */
+      max-width: 700px;
+      border-radius: 5px;
+      user-select: none;
+      display: none; /* começa oculto */
+      overflow: visible; /* remove barra de rolagem */
+      height: auto; /* altura automática para caber todo conteúdo */
+    }
+    #manualNumbers {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+      justify-items: center;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    @media (max-width: 1024px) {
+      #jogosGerados, #jogosSalvos {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      #jogosGerados, #jogosSalvos {
+        grid-template-columns: 1fr;
+      }
+      .bola {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+        margin: 3px;
+      }
+      button {
+        font-size: 14px;
+        padding: 8px 12px;
+      }
+      .jogo-container {
+        grid-template-columns: repeat(10, 36px);
+        grid-auto-rows: 36px;
+      }
+      input[type="number"] {
+        width: 60px;
+        font-size: 14px;
+      }
+      #manualNumbersContainer {
+        max-width: 360px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="conteiner-button">
-        <button>mostrar <br>tudo</button>
-        <button>mapear<br>map</button>
-        <button>somar <br>tudo</button>
-        <button>filtrar<br>filter</button>
 
-    </div>
+  <h1>Lotomania - Gerador e Jogo Manual</h1>
 
-    <ul>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-        <li>
-            <img src="./img/1.jpg">
-            <p>x bacon egg</p>
-            <p class="item-price">R$ 35</p>
-        </li>
-    </ul>
+  <label for="quantidade">Quantos jogos aleatórios deseja gerar?</label>
+  <input type="number" id="quantidade" value="10" min="1" max="100" step="1" />
+
+  <button onclick="gerarJogos()">Gerar Jogos</button>
+  <button onclick="toggleJogosSalvos()">Mostrar/Ocultar Jogos Salvos</button>
+  <button onclick="toggleManualNumbers()">Jogo Manual</button>
+
+  <h2>Último Resultado Oficial</h2>
+  <div id="ultimoResultado">Carregando...</div>
+
+  <!-- Caixa de números manuais -->
+  <div id="manualNumbersContainer">
+    <div id="manualNumbers"></div>
+  </div>
+
+  <h2 id="tituloJogosSalvos" style="display:none;">Jogos Salvos</h2>
+  <div id="jogosSalvos">Nenhum jogo salvo ainda.</div>
+
+  <h2>Jogos Aleatórios</h2>
+  <div id="jogosGerados"></div>
+
+<script>
+  let ultimoResultado = [];
+  let numerosManuaisSelecionados = new Set();
+
+  async function buscarUltimoResultado() {
+    try {
+      const res = await fetch('https://loteriascaixa-api.herokuapp.com/api/lotomania/latest');
+      if (!res.ok) throw new Error('Erro na requisição');
+      const dados = await res.json();
+      if (!dados || !dados.dezenas) throw new Error('Dados inválidos');
+      ultimoResultado = dados.dezenas.map(n => n.toString().padStart(2, '0'));
+      mostrarUltimoResultado();
+    } catch (err) {
+      document.getElementById("ultimoResultado").textContent = "Erro ao carregar resultado.";
+      console.error("Erro ao buscar resultado:", err);
+    }
+  }
+
+  function mostrarUltimoResultado() {
+    const container = document.getElementById("ultimoResultado");
+    container.innerHTML = "";
+    ultimoResultado.forEach(n => {
+      const bola = document.createElement("div");
+      bola.className = "bola";
+      bola.textContent = n;
+      container.appendChild(bola);
+    });
+  }
+
+  function toggleManualNumbers() {
+    const container = document.getElementById("manualNumbersContainer");
+    if (container.style.display === "none" || container.style.display === "") {
+      container.style.display = "block";
+      if (document.getElementById("manualNumbers").children.length === 0) {
+        criarNumerosManuais();
+      }
+    } else {
+      container.style.display = "none";
+      limparSelecaoManual();
+    }
+  }
+
+  function criarNumerosManuais() {
+    const container = document.getElementById("manualNumbers");
+    for (let i = 0; i < 100; i++) {
+      const numStr = i.toString().padStart(2, '0');
+      const bola = document.createElement("div");
+      bola.className = "bola";
+      bola.textContent = numStr;
+      bola.onclick = () => {
+        if (numerosManuaisSelecionados.has(numStr)) {
+          numerosManuaisSelecionados.delete(numStr);
+          bola.classList.remove("selecionado");
+        } else {
+          numerosManuaisSelecionados.add(numStr);
+          bola.classList.add("selecionado");
+        }
+      };
+      container.appendChild(bola);
+    }
+  }
+
+  function limparSelecaoManual() {
+    numerosManuaisSelecionados.clear();
+    const bolas = document.querySelectorAll("#manualNumbers .bola.selecionado");
+    bolas.forEach(bola => bola.classList.remove("selecionado"));
+  }
+
+  // Código existente para geração de jogos e outras funções mantém-se igual
+
+  function gerarJogoUnico() {
+    if (ultimoResultado.length !== 50) {
+      return gerarJogoAleatorioPuro();
+    }
+
+    const usados = new Set();
+    const jogo = [];
+
+    // Manter 20 números do último resultado fixos
+    const copiaUltimo = [...ultimoResultado];
+    while (jogo.length < 20 && copiaUltimo.length > 0) {
+      const i = Math.floor(Math.random() * copiaUltimo.length);
+      const dezena = copiaUltimo.splice(i, 1)[0];
+      if (!usados.has(dezena)) {
+        usados.add(dezena);
+        jogo.push(dezena);
+      }
+    }
+
+    const foraResultado = [];
+    for (let i = 0; i < 100; i++) {
+      const n = i.toString().padStart(2, '0');
+      if (!ultimoResultado.includes(n)) {
+        foraResultado.push(n);
+      }
+    }
+
+    while (jogo.length < 50 && foraResultado.length > 0) {
+      const i = Math.floor(Math.random() * foraResultado.length);
+      const dezena = foraResultado.splice(i, 1)[0];
+      if (!usados.has(dezena)) {
+        usados.add(dezena);
+        jogo.push(dezena);
+      }
+    }
+
+    return jogo.sort((a, b) => a - b);
+  }
+
+  function gerarJogoAleatorioPuro() {
+    const numeros = new Set();
+    while (numeros.size < 50) {
+      const n = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+      numeros.add(n);
+    }
+    return Array.from(numeros).sort((a,b) => a - b);
+  }
+
+  function criarVisualJogo(jogo, comBotaoSalvar = true, numJogo = null) {
+    const container = document.createElement("div");
+    container.className = "jogo-container";
+
+    let acertos = 0;
+    jogo.forEach(n => {
+      const bola = document.createElement("div");
+      bola.className = "bola";
+      bola.textContent = n;
+      if (ultimoResultado.includes(n)) {
+        bola.style.border = "3px solid limegreen";
+        acertos++;
+      }
+      container.appendChild(bola);
+    });
+
+    // Exibe a quantidade de acertos
+    const acertosInfo = document.createElement("p");
+    acertosInfo.textContent = `Acertos: ${acertos}`;
+    acertosInfo.style.gridColumn = "1 / -1";
+    acertosInfo.style.fontWeight = "bold";
+    acertosInfo.style.marginTop = "8px";
+    container.appendChild(acertosInfo);
+
+    if (comBotaoSalvar) {
+      const btnSalvar = document.createElement("button");
+      btnSalvar.textContent = numJogo ? `Salvar Jogo ${numJogo}` : "Salvar Jogo";
+      btnSalvar.onclick = () => salvarJogo(jogo);
+      container.appendChild(btnSalvar);
+    } else if (numJogo !== null) {
+      const btnExcluir = document.createElement("button");
+      btnExcluir.textContent = "Excluir";
+      btnExcluir.onclick = () => excluirJogoSalvo(numJogo);
+      container.appendChild(btnExcluir);
+    }
+
+    return container;
+  }
+
+  function getJogosSalvos() {
+    const json = localStorage.getItem('jogosSalvos');
+    if (!json) return [];
+    try {
+      return JSON.parse(json);
+    } catch {
+      return [];
+    }
+  }
+
+  function setJogosSalvos(jogos) {
+    localStorage.setItem('jogosSalvos', JSON.stringify(jogos));
+  }
+
+  function salvarJogo(jogo) {
+    const jogosSalvos = getJogosSalvos();
+    const jogoStr = jogo.join(",");
+    if (jogosSalvos.some(js => js.join(",") === jogoStr)) {
+      alert("Este jogo já está salvo.");
+      return;
+    }
+    jogosSalvos.push(jogo);
+    setJogosSalvos(jogosSalvos);
+    atualizarListaJogosSalvos();
+    // mensagem removida para salvar silenciosamente
+  }
+
+  function excluirJogoSalvo(index) {
+    const jogosSalvos = getJogosSalvos();
+    jogosSalvos.splice(index, 1);
+    setJogosSalvos(jogosSalvos);
+    atualizarListaJogosSalvos();
+  }
+
+  function atualizarListaJogosSalvos() {
+    const container = document.getElementById("jogosSalvos");
+    const jogosSalvos = getJogosSalvos();
+    container.innerHTML = "";
+    if (jogosSalvos.length === 0) {
+      container.textContent = "Nenhum jogo salvo ainda.";
+      return;
+    }
+    jogosSalvos.forEach((jogo, idx) => {
+      const divJogo = criarVisualJogo(jogo, false, idx);
+      container.appendChild(divJogo);
+    });
+  }
+
+  function gerarJogos() {
+    let qtd = parseInt(document.getElementById("quantidade").value);
+    if (isNaN(qtd) || qtd < 1) {
+      alert("Por favor, digite um número válido maior ou igual a 1.");
+      return;
+    }
+    if (qtd > 100) {
+      alert("O limite máximo de jogos gerados é 100.");
+      qtd = 100;
+    }
+    const jogosGeradosDiv = document.getElementById("jogosGerados");
+    jogosGeradosDiv.innerHTML = "";
+    for (let i = 0; i < qtd; i++) {
+      const jogo = gerarJogoUnico();
+      const container = criarVisualJogo(jogo, true, i + 1);
+      jogosGeradosDiv.appendChild(container);
+    }
+  }
+
+  function toggleJogosSalvos() {
+    const container = document.getElementById("jogosSalvos");
+    const titulo = document.getElementById("tituloJogosSalvos");
+    if (container.style.display === "none" || container.style.display === "") {
+      container.style.display = "grid";
+      titulo.style.display = "block";
+    } else {
+      container.style.display = "none";
+      titulo.style.display = "none";
+    }
+  }
+
+  // Inicialização
+  buscarUltimoResultado();
+  atualizarListaJogosSalvos();
+</script>
+
 </body>
-
 </html>
