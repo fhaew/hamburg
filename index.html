@@ -324,13 +324,15 @@
       container.appendChild(bola);
     });
 
+    
     // Exibe a quantidade de acertos
-    const acertosInfo = document.createElement("p");
-    acertosInfo.textContent = `Acertos: ${acertos}`;
-    acertosInfo.style.gridColumn = "1 / -1";
-    acertosInfo.style.fontWeight = "bold";
-    acertosInfo.style.marginTop = "8px";
-    container.appendChild(acertosInfo);
+const acertosInfo = document.createElement("p");
+acertosInfo.textContent = `Acertos: ${acertos}`;
+acertosInfo.style.gridColumn = "1 / -1";
+acertosInfo.style.fontWeight = "bold";
+acertosInfo.style.marginTop = "8px";
+container.appendChild(acertosInfo);
+
 
     if (comBotaoSalvar) {
       const btnSalvar = document.createElement("button");
